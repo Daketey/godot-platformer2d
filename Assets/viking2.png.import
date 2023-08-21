@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhj8wxkmhpyal"
-path="res://.godot/imported/Background.png-d346e9ce37c7294bb8a0c89de5d380cd.ctex"
+uid="uid://btj4gj8mvk2bg"
+path="res://.godot/imported/viking2.png-f54e46ee9fcb4d024ef63549a1d84429.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Background.png"
-dest_files=["res://.godot/imported/Background.png-d346e9ce37c7294bb8a0c89de5d380cd.ctex"]
+source_file="res://Assets/viking2.png"
+dest_files=["res://.godot/imported/viking2.png-f54e46ee9fcb4d024ef63549a1d84429.ctex"]
 
 [params]
 

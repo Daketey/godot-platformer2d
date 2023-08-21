@@ -1,18 +1,18 @@
-[gd_scene load_steps=43 format=3 uid="uid://dk5lk4wtd0jum"]
+[gd_scene load_steps=45 format=3 uid="uid://dk5lk4wtd0jum"]
 
-[ext_resource type="Script" path="res://scripts/character_scripts/player.gd" id="1_fkctb"]
-[ext_resource type="Script" path="res://scripts/character_scripts/Hit.gd" id="1_gshe1"]
-[ext_resource type="Texture2D" uid="uid://btj4gj8mvk2bg" path="res://viking2.png" id="1_tu0sp"]
-[ext_resource type="Script" path="res://scripts/character_scripts/CharacterStateMachine.gd" id="2_crqo0"]
-[ext_resource type="Script" path="res://enemy/Damageable.gd" id="3_hp1m0"]
-[ext_resource type="Script" path="res://scripts/character_scripts/GroundState.gd" id="3_qdiec"]
-[ext_resource type="Script" path="res://scripts/character_scripts/AirState.gd" id="4_38nes"]
-[ext_resource type="Script" path="res://scripts/character_scripts/LandingState.gd" id="5_w0tul"]
-[ext_resource type="Script" path="res://scripts/character_scripts/StateDebug.gd" id="7_ha6qx"]
-[ext_resource type="Script" path="res://scripts/character_scripts/Attack.gd" id="7_nrwjl"]
-[ext_resource type="Script" path="res://Sword.gd" id="9_inmlu"]
-[ext_resource type="Script" path="res://scripts/character_scripts/State.gd" id="10_3d42y"]
-[ext_resource type="Script" path="res://scripts/character_scripts/FacingCollisionShape2D.gd" id="10_gp1lg"]
+[ext_resource type="Script" path="res://Scripts/Character/player.gd" id="1_qdjuk"]
+[ext_resource type="Texture2D" uid="uid://btj4gj8mvk2bg" path="res://Assets/viking2.png" id="1_tu0sp"]
+[ext_resource type="Script" path="res://Scripts/CharacterStateMachine.gd" id="2_crqo0"]
+[ext_resource type="Script" path="res://Scripts/Damageable.gd" id="3_58vsy"]
+[ext_resource type="Script" path="res://Scripts/GroundState.gd" id="3_qdiec"]
+[ext_resource type="Script" path="res://Scripts/AirState.gd" id="4_38nes"]
+[ext_resource type="Script" path="res://Scripts/LandingState.gd" id="5_w0tul"]
+[ext_resource type="Script" path="res://Scripts/StateDebug.gd" id="7_ha6qx"]
+[ext_resource type="Script" path="res://Scripts/Attack.gd" id="7_nrwjl"]
+[ext_resource type="Script" path="res://Scripts/State.gd" id="9_2pl5v"]
+[ext_resource type="Script" path="res://Scripts/Sword.gd" id="9_inmlu"]
+[ext_resource type="Script" path="res://Scripts/Hit.gd" id="10_g80pw"]
+[ext_resource type="Script" path="res://Scripts/FacingCollisionShape2D.gd" id="10_gp1lg"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1cxhk"]
 radius = 11.0
@@ -30,7 +30,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [45]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -42,7 +42,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_dkvpe"]
@@ -481,6 +481,9 @@ animation = &"attack1"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oyixm"]
 animation = &"attack2"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3g411"]
+animation = &"dead"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h8jtt"]
 animation = &"jump"
 
@@ -520,6 +523,8 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_usraf"]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3eo1h"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3mllh"]
 states/RESET/node = SubResource("AnimationNodeAnimation_cp7hh")
 states/RESET/position = Vector2(568, 121)
@@ -527,22 +532,27 @@ states/attack1/node = SubResource("AnimationNodeAnimation_m1qvn")
 states/attack1/position = Vector2(320, 180)
 states/attack2/node = SubResource("AnimationNodeAnimation_oyixm")
 states/attack2/position = Vector2(441, 180)
+states/dead/node = SubResource("AnimationNodeAnimation_3g411")
+states/dead/position = Vector2(284, 24)
 states/jump/node = SubResource("AnimationNodeAnimation_h8jtt")
 states/jump/position = Vector2(563, 44)
 states/move/node = SubResource("AnimationNodeBlendSpace1D_uub7r")
 states/move/position = Vector2(352, 100)
-transitions = ["jump", "RESET", SubResource("AnimationNodeStateMachineTransition_dic7o"), "Start", "move", SubResource("AnimationNodeStateMachineTransition_sajhb"), "move", "jump", SubResource("AnimationNodeStateMachineTransition_wanyo"), "RESET", "move", SubResource("AnimationNodeStateMachineTransition_511ds"), "move", "attack1", SubResource("AnimationNodeStateMachineTransition_csv7h"), "attack1", "attack2", SubResource("AnimationNodeStateMachineTransition_0w2k5"), "attack2", "move", SubResource("AnimationNodeStateMachineTransition_pxyka"), "attack1", "move", SubResource("AnimationNodeStateMachineTransition_usraf")]
+transitions = ["jump", "RESET", SubResource("AnimationNodeStateMachineTransition_dic7o"), "Start", "move", SubResource("AnimationNodeStateMachineTransition_sajhb"), "move", "jump", SubResource("AnimationNodeStateMachineTransition_wanyo"), "RESET", "move", SubResource("AnimationNodeStateMachineTransition_511ds"), "move", "attack1", SubResource("AnimationNodeStateMachineTransition_csv7h"), "attack1", "attack2", SubResource("AnimationNodeStateMachineTransition_0w2k5"), "attack2", "move", SubResource("AnimationNodeStateMachineTransition_pxyka"), "attack1", "move", SubResource("AnimationNodeStateMachineTransition_usraf"), "move", "dead", SubResource("AnimationNodeStateMachineTransition_3eo1h")]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0njda"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qnvxr"]
 size = Vector2(26, 28)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hit_state")]
 collision_layer = 2
-script = ExtResource("1_fkctb")
+script = ExtResource("1_qdjuk")
+hit_state = NodePath("CharacterStateMachine/Hit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+light_mask = 4
+visibility_layer = 4
 position = Vector2(0, 2.5)
 shape = SubResource("CapsuleShape2D_1cxhk")
 
@@ -552,6 +562,7 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_tu0sp")
 hframes = 9
 vframes = 6
+frame = 45
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -564,8 +575,7 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/move/blend_position = 0
 
 [node name="Damageable" type="Node" parent="."]
-script = ExtResource("3_hp1m0")
-health = 50.0
+script = ExtResource("3_58vsy")
 
 [node name="CharacterStateMachine" type="Node" parent="." node_paths=PackedStringArray("character", "animation_tree", "current_state")]
 script = ExtResource("2_crqo0")
@@ -599,13 +609,20 @@ return_state = NodePath("../Ground")
 wait_time = 0.3
 one_shot = true
 
-[node name="HitState" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("damageable", "dead_state")]
-script = ExtResource("1_gshe1")
+[node name="Dead" type="Node" parent="CharacterStateMachine"]
+script = ExtResource("9_2pl5v")
+can_move = false
+
+[node name="Hit" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("damageable", "dead_state", "return_state")]
+script = ExtResource("10_g80pw")
 damageable = NodePath("../../Damageable")
 dead_state = NodePath("../Dead")
+return_state = NodePath("../Ground")
+can_move = false
 
-[node name="Dead" type="Node" parent="CharacterStateMachine"]
-script = ExtResource("10_3d42y")
+[node name="Timer" type="Timer" parent="CharacterStateMachine/Hit"]
+wait_time = 0.35
+one_shot = true
 
 [node name="StateDebug" type="Label" parent="." node_paths=PackedStringArray("state_machine")]
 offset_left = -88.0
@@ -620,11 +637,14 @@ state_machine = NodePath("../CharacterStateMachine")
 [node name="Sword" type="Area2D" parent="." node_paths=PackedStringArray("player", "facing_collision_shape")]
 collision_layer = 0
 collision_mask = 4
+monitoring = false
 script = ExtResource("9_inmlu")
 player = NodePath("..")
 facing_collision_shape = NodePath("CollisionShape2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
+light_mask = 0
+visibility_layer = 4
 position = Vector2(20, 0)
 shape = SubResource("RectangleShape2D_qnvxr")
 script = ExtResource("10_gp1lg")
@@ -633,4 +653,6 @@ facing_right_position = Vector2(-20, 0)
 
 [connection signal="animation_finished" from="AnimationTree" to="CharacterStateMachine/Landing" method="_on_animation_tree_animation_finished"]
 [connection signal="animation_finished" from="AnimationTree" to="CharacterStateMachine/Attack" method="_on_animation_tree_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
+[connection signal="timeout" from="CharacterStateMachine/Hit/Timer" to="CharacterStateMachine/Hit" method="_on_timer_timeout"]
 [connection signal="body_entered" from="Sword" to="Sword" method="_on_body_entered"]

@@ -19,7 +19,7 @@ func _ready():
 				child.character = character
 				child.playback = animation_tree["parameters/playback"]
 				
-				child.connect("interrupt_signal", on_state_interrput_state)
+				child.connect("interrupt_signal", on_state_interrput)
 				
 			else:
 				push_warning("Child "+ child.name + " is not a CharacterStateMachine") 
@@ -40,7 +40,7 @@ func switch_states(new_state : State):
 		current_state = new_state
 		current_state.on_enter()
 		
-func on_state_interrput_state(new_state : State):
+func on_state_interrput(new_state : State):
 	switch_states(new_state)
 		
 func _input(event : InputEvent):

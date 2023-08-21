@@ -3,6 +3,7 @@ extends CharacterBody2D
 class_name Player
 
 @export var speed : float = 200.0
+@export var hit_state : State
 
 @onready var sprite : Sprite2D = $Sprite2D
 @onready var animation_tree : AnimationTree = $AnimationTree
@@ -28,11 +29,11 @@ func _physics_process(delta):
 	direction = Input.get_vector("left", "right", "up", "down")
 	if direction.x != 0 and state_machine.check_can_move():
 		velocity.x = direction.x * speed
-	else:
+	elif state_machine.current_state != hit_state:
 		velocity.x = move_toward(velocity.x, 0, speed)
 	
-	update_animation()
 	move_and_slide()
+	update_animation()
 	update_flip_direction()
 	
 func update_animation():

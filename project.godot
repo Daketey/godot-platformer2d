@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Testproj"
-run/main_scene="res://world.tscn"
+run/main_scene="res://Scenes/world.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Assets/icon.svg"
 
 [autoload]
 
-SignalBus="*res://SignalBus.gd"
+SignalBus="*res://Scripts/SignalBus.gd"
 
 [display]
 
