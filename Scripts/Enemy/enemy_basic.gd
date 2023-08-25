@@ -21,6 +21,7 @@ signal facing_direction_changed(facing_right : bool)
 func _ready():
 	animation_tree.active = true
 	direction = starting_move_direction
+	velocity.x = direction.x * SPEED
 
 
 func _physics_process(delta):
@@ -28,28 +29,21 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	if direction and state_machine.check_can_move():
 		velocity.x = direction.x * SPEED
-	elif state_machine.current_state != hit_state:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
-	update_flip_direction()
 	
 func update_flip_direction():
-	if direction.x < 0:
-			sprite.flip_h = false
-	elif direction.x > 0:
+	if direction.x > 0:
 			sprite.flip_h = true
+	elif direction.x < 0:
+			sprite.flip_h = false
 			
-	emit_signal("facing_direction_changed", sprite.flip_h)	
+	emit_signal("facing_direction_changed", sprite.flip_h)
 	
 
 func _on_check_bounds_flip_signal(direction_sign : int):
-	if direction_sign > 0:
-		direction = Vector2.RIGHT
-	if direction_sign < 0:
-		direction = Vector2.LEFT
+	direction.x = -1 * direction.x
+	update_flip_direction()

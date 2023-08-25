@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://dcwug0rv14vxj"]
+
+[ext_resource type="Script" path="res://Scripts/Trap.gd" id="1_5vnn7"]
+[ext_resource type="Texture2D" uid="uid://b22airtl3brg5" path="res://Assets/Hive.png" id="2_w84ry"]
+[ext_resource type="Script" path="res://Scripts/FacingCollisionShape2D.gd" id="3_s8ar5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jmfcl"]
+size = Vector2(16, 14)
+
+[node name="Area2D" type="Area2D"]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(-1, 0)
+scale = Vector2(1.5, 1.5)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_5vnn7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+light_mask = 0
+visibility_layer = 2
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_jmfcl")
+script = ExtResource("3_s8ar5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1, 2)
+scale = Vector2(0.65, 0.673077)
+texture = ExtResource("2_w84ry")
+hframes = 13
+vframes = 15
+frame = 78
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

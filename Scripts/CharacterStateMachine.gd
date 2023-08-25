@@ -14,11 +14,9 @@ func _ready():
 	
 	for child in get_children():
 			if child is State:
-				states.append(child)
 				# Set state up with what they would need to function
 				child.character = character
 				child.playback = animation_tree["parameters/playback"]
-				
 				child.connect("interrupt_signal", on_state_interrput)
 				
 			else:
