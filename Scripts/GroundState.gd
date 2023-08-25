@@ -2,7 +2,6 @@ extends State
 
 class_name GroundState
 
-@export var jump_velocity = -900.0
 @export var air_state : State
 @export var jump_animation : String = "jump"
 @export var attack_state : State
@@ -11,9 +10,15 @@ class_name GroundState
 
 @onready var coyote_timer : Timer = $Coyote
 
+@export var jump_height : float
+@export var jump_time_to_peak : float
+@export var jump_time_to_descent : float
+
+@onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0
+
+
 var coyote_time_start = false
 var condition = false
-
 
 func state_process(delta):
 

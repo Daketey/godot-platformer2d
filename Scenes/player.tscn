@@ -578,6 +578,9 @@ collision_layer = 2
 script = ExtResource("1_qdjuk")
 hit_state = NodePath("CharacterStateMachine/Hit")
 wall_state = NodePath("CharacterStateMachine/Wall")
+jump_height = 100.0
+jump_time_to_peak = 0.5
+jump_time_to_descent = 0.4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 light_mask = 4
@@ -617,6 +620,9 @@ script = ExtResource("3_qdiec")
 air_state = NodePath("../Air")
 attack_state = NodePath("../Attack")
 wall_state = NodePath("../Wall")
+jump_height = 100.0
+jump_time_to_peak = 0.5
+jump_time_to_descent = 0.4
 
 [node name="Coyote" type="Timer" parent="CharacterStateMachine/Ground"]
 wait_time = 0.1

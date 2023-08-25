@@ -31,7 +31,7 @@ func state_process(delta):
 		next_state = landing_state
 
 func state_input(event : InputEvent):
-	if event.is_action_pressed("jump") and not timer.is_stopped() and spam_timer.is_stopped():
+	if  not timer.is_stopped() and spam_timer.is_stopped():
 		spam_timer.start()
 		wall_jump()
 		
@@ -50,9 +50,7 @@ func check_valid_walls():
 				return false
 
 func wall_jump():
-	if Input.is_action_pressed("up"):
-			character.velocity.x = -facing * 200
-			character.velocity.y = -700
+		character.velocity = Vector2(facing * 200,-500)
 
 	
 func wall_slide(delta):

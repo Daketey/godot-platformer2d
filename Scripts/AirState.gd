@@ -3,7 +3,7 @@ extends State
 class_name  AirState
 
 @export var landing_state : State
-@export var double_jump_velocity : float = -700
+@export var double_jump_velocity : float = -400
 @export var attack_state : State
 @export var attack_node : String = "attack1"
 @export var wall_state : State
@@ -18,11 +18,8 @@ func state_process(delta):
 		next_state = landing_state
 	
 func state_input(event : InputEvent):
-	if (Input.is_action_pressed("left") or Input.is_action_pressed("right")) and character.is_on_wall():
+	if character.is_on_wall():
 		next_state = wall_state
-	
-	if Input.is_action_just_released("jump"):
-		jump_cut()
 	
 	if Input.is_action_just_pressed("jump"):
 		if !double_jumped:
@@ -31,10 +28,7 @@ func state_input(event : InputEvent):
 	if event.is_action_pressed("attack"):
 		attack()
 
-func jump_cut():
-	if character.velocity.y < -100:
-		character.velocity.y = 200
-		
+
 func on_exit():
 	if next_state == landing_state:
 		playback.travel("RESET")
