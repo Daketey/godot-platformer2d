@@ -578,7 +578,7 @@ collision_layer = 2
 script = ExtResource("1_qdjuk")
 hit_state = NodePath("CharacterStateMachine/Hit")
 wall_state = NodePath("CharacterStateMachine/Wall")
-jump_height = 100.0
+jump_height = 80.0
 jump_time_to_peak = 0.5
 jump_time_to_descent = 0.4
 
@@ -620,7 +620,7 @@ script = ExtResource("3_qdiec")
 air_state = NodePath("../Air")
 attack_state = NodePath("../Attack")
 wall_state = NodePath("../Wall")
-jump_height = 100.0
+jump_height = 80.0
 jump_time_to_peak = 0.5
 jump_time_to_descent = 0.4
 
@@ -662,8 +662,8 @@ ray_casts = [NodePath("../../right"), NodePath("../../left")]
 [node name="Timer" type="Timer" parent="CharacterStateMachine/Wall"]
 one_shot = true
 
-[node name="SpamTimer" type="Timer" parent="CharacterStateMachine/Wall"]
-wait_time = 0.1
+[node name="WallCoyote" type="Timer" parent="CharacterStateMachine/Wall"]
+wait_time = 0.3
 one_shot = true
 
 [node name="Hit" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("damageable", "dead_state", "return_state")]

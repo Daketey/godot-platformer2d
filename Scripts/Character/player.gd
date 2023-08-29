@@ -13,9 +13,9 @@ class_name Player
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var direction : Vector2 = Vector2.ZERO
-var acceleration = 50
+var acceleration = 70
 var friction = 0.2
-const MAX_VELOCITY = 160
+const MAX_VELOCITY = 180
 const gravity = 150
 var air_time = 0.0
 var jump_buffer = false
