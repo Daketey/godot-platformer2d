@@ -23,6 +23,7 @@ func on_exit():
 func on_damageable_hit(node: Node, damage_amount : int, knockback_direction : Vector2):
 	if damageable.health > 0:
 		character.velocity = knockback_velocity * knockback_direction
+		character.velocity.x = -400
 		emit_signal("interrupt_signal", self)
 	else:
 		emit_signal("interrupt_signal", dead_state)

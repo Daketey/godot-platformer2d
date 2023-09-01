@@ -15,30 +15,23 @@ var last_jump = -1
 
 func on_enter():
 	timer.start()
-#	already_jumped = false
 
 
 func state_process(delta):
-	if not check_valid_walls() and spam_timer.is_stopped():
+	if not check_valid_walls():
 		next_state = air_state
 		playback.travel("jump")
 		
 	if check_valid_walls() and not timer.is_stopped():
-		wall_slide(delta)
+		wall_climb(delta)
 		
 	if character.is_on_floor():
 		playback.travel("RESET")
-		last_jump = -1*facing
 		next_state = landing_state
 
 func state_input(event : InputEvent):
-	if  not timer.is_stopped():
-		if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump"):
 			wall_jump()
-		
-	if timer.is_stopped():
-		character.velocity.x = facing*300
-		character.velocity.y = 100
 			
 func check_valid_walls():
 	for raycast in ray_casts:
@@ -51,15 +44,16 @@ func check_valid_walls():
 				return false
 
 func wall_jump():
-		character.velocity.x = facing * 400
-		print(character.velocity.y)
-		character.velocity.y = -420
+		character.velocity.x = facing * 800
+		character.velocity.y = -300
 
 	
-func wall_slide(delta):
-	if (Input.is_action_pressed("left") or Input.is_action_pressed("right")):
+func wall_climb(delta):
+	if (Input.is_action_pressed("left") or Input.is_action_pressed("right")) and not Input.is_action_pressed("up"):
 		character.velocity.y = 70 * delta
-		character.velocity.y = min(character.velocity.y, 100)
+		character.velocity.y = min(character.velocity.y, 50)
+	elif Input.is_action_pressed("up"):
+		character.velocity.y = -150
 	
 
 

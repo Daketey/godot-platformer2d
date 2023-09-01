@@ -9,6 +9,7 @@ class_name Enemy
 @onready var state_machine : CharacterStateMachine = $CharacterStateMachine
 @onready var animation_tree : AnimationTree = $AnimationTree
 
+
 const SPEED = 30
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.

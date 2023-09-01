@@ -4,7 +4,7 @@ class_name Player
 
 @export var speed : float = 150.0
 @export var hit_state : State
-@export var wall_state : State
+@export var attack_state : State
 
 @onready var sprite : Sprite2D = $Sprite2D
 @onready var animation_tree : AnimationTree = $AnimationTree
@@ -13,13 +13,10 @@ class_name Player
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var direction : Vector2 = Vector2.ZERO
-var acceleration = 70
-var friction = 0.2
-const MAX_VELOCITY = 180
-const gravity = 150
-var air_time = 0.0
 var jump_buffer = false
-
+@export var acceleration : int = 70
+@export var friction : float = 0.2
+@export var max_horizontal_velocity : int = 200
 @export var jump_height : float
 @export var jump_time_to_peak : float
 @export var jump_time_to_descent : float
@@ -40,9 +37,10 @@ func _physics_process(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	direction.x = Input.get_axis("left", "right")
 	direction = direction.normalized()
-	if direction != Vector2.ZERO:
+
+	if direction != Vector2.ZERO and state_machine.check_can_move():
 		add_acceleration(direction)
-		velocity.x = clamp(velocity.x, -MAX_VELOCITY, MAX_VELOCITY)
+		velocity.x = clamp(velocity.x, -max_horizontal_velocity, max_horizontal_velocity)
 		update_animation(direction.x)
 	else:
 		add_friction(friction)
@@ -66,8 +64,8 @@ func update_animation(direction):
 	animation_tree.set("parameters/move/blend_position", direction)
 	
 
-func get_gravity() :
-	return jump_gravity if velocity.y < 0.0 else fall_gravity
+func get_gravity():
+	return jump_gravity if velocity.y < 0 else fall_gravity
 
 
 func update_flip_direction():

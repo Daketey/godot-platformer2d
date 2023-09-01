@@ -62,7 +62,7 @@ func generate_level():
 			var scene_instance = spike.instantiate()
 			add_child(scene_instance)
 			scene_instance.position = (i + Vector2(0.75,0.5))* 32
-			tileMap.set_cell(0, i, 1, Vector2(0 , 5))
+#			tileMap.set_cell(0, i, 1, Vector2(0 , 5))
 #			scene_instance.position = i*32
 	var x = randi()%20 +4
 #	player.position = starting_postiion*32

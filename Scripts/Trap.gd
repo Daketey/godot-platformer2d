@@ -14,12 +14,7 @@ func _on_body_entered(body):
 			# Get direction from sword to the body
 			var direction_to_damageable = body.global_position - get_parent().global_position
 			var direction_sign = sign(direction_to_damageable.y)
-			if direction_sign > 0:
-				child.hit(damage, Vector2.DOWN)
-			elif direction_sign < 0:
-				child.hit(damage, Vector2.UP)
-			else:
-				child.hit(damage, Vector2.ZERO)
+			child.hit(damage, Vector2.UP)
 					
 func _on_player_facing_direction_changed( facing_right : bool):
 	if facing_right:

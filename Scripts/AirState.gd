@@ -17,13 +17,14 @@ func state_process(delta):
 	if character.is_on_floor():
 		next_state = landing_state
 		
-	if character.wall_state.check_valid_walls():
+	if wall_state.check_valid_walls():
 		next_state = wall_state
 	
 func state_input(event : InputEvent):
 		
 	if Input.is_action_just_released("jump"):
-		character.velocity.y +=100
+		if character.velocity.y < -200:
+			character.velocity.y = 50
 	
 	if Input.is_action_just_pressed("jump"):
 		if !double_jumped:
