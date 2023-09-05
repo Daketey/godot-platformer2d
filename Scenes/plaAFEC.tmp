@@ -45,6 +45,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 3)]
+}
 
 [sub_resource type="Animation" id="Animation_dkvpe"]
 resource_name = "attack1"
@@ -398,7 +410,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("../CollisionShape2D:position")
+tracks/4/path = NodePath("CollisionShape2D:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -565,7 +577,7 @@ transitions = ["jump", "RESET", SubResource("AnimationNodeStateMachineTransition
 [sub_resource type="LabelSettings" id="LabelSettings_0njda"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qnvxr"]
-size = Vector2(18.6875, 20.5)
+size = Vector2(14.75, 23)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hit_state", "attack_state", "body")]
 collision_layer = 2
@@ -584,14 +596,10 @@ visibility_layer = 4
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_1cxhk")
 
-[node name="Damageable" type="Node" parent="."]
-script = ExtResource("3_58vsy")
-
 [node name="Body" type="Node2D" parent="."]
-visibility_layer = 6
 
 [node name="Sprite2D" type="Sprite2D" parent="Body"]
-position = Vector2(-3, -10)
+position = Vector2(-3, -5)
 scale = Vector2(1.327, 1.5)
 texture = ExtResource("1_tu0sp")
 hframes = 9
@@ -607,6 +615,9 @@ libraries = {
 tree_root = SubResource("AnimationNodeStateMachine_3mllh")
 anim_player = NodePath("../AnimationPlayer")
 parameters/move/blend_position = 0
+
+[node name="Damageable" type="Node" parent="Body"]
+script = ExtResource("3_58vsy")
 
 [node name="CharacterStateMachine" type="Node" parent="Body" node_paths=PackedStringArray("character", "animation_tree", "current_state")]
 script = ExtResource("2_crqo0")
@@ -655,23 +666,23 @@ one_shot = true
 script = ExtResource("9_2pl5v")
 can_move = false
 
-[node name="Wall" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("air_state", "landing_state", "raycast", "player")]
+[node name="Wall" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("air_state", "landing_state")]
 script = ExtResource("11_jc8h4")
+jump_velocity = null
 air_state = NodePath("../Air")
 landing_state = NodePath("../Landing")
-raycast = NodePath("../../wallcast")
-player = NodePath("../../..")
 can_move = false
 
 [node name="Timer" type="Timer" parent="Body/CharacterStateMachine/Wall"]
 one_shot = true
 
 [node name="WallCoyote" type="Timer" parent="Body/CharacterStateMachine/Wall"]
+wait_time = 0.3
 one_shot = true
 
 [node name="Hit" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("damageable", "dead_state", "return_state")]
 script = ExtResource("10_g80pw")
-damageable = NodePath("../../../Damageable")
+damageable = NodePath("../../Damageable")
 dead_state = NodePath("../Dead")
 return_state = NodePath("../Ground")
 can_move = false
@@ -703,16 +714,17 @@ player = NodePath("../..")
 facing_collision_shape = NodePath("CollisionShape2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body/Sword"]
+visible = false
 light_mask = 0
 visibility_layer = 4
-position = Vector2(15.6563, 4.25)
+position = Vector2(14, 7)
 shape = SubResource("RectangleShape2D_qnvxr")
 one_way_collision_margin = 0.0
 script = ExtResource("10_gp1lg")
 facing_left_position = Vector2(20, 3)
 facing_right_position = Vector2(-20, 3)
 
-[connection signal="animation_finished" from="Body/AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
+[connection signal="animation_finished" from="Body/AnimationTree" to="Body/Damageable" method="_on_animation_tree_animation_finished"]
 [connection signal="animation_finished" from="Body/AnimationTree" to="Body/CharacterStateMachine/Landing" method="_on_animation_tree_animation_finished"]
 [connection signal="animation_finished" from="Body/AnimationTree" to="Body/CharacterStateMachine/Attack" method="_on_animation_tree_animation_finished"]
 [connection signal="timeout" from="Body/CharacterStateMachine/Landing/JumpBuffer" to="Body/CharacterStateMachine/Ground" method="_on_jump_buffer_timeout"]

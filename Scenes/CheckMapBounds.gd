@@ -17,7 +17,7 @@ func _on_player_facing_direction_changed( facing_right : bool):
 		facing_collision_shape.position = facing_collision_shape.facing_left_position
 
 
-func _on_body_entered(body):
+func _on_body_exited(body):
 	var direction_to_damageable = body.global_position - get_parent().global_position
 	var direction_sign = sign(direction_to_damageable.x)
 	emit_signal("flip_signal", direction_sign)

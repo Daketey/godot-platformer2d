@@ -5,13 +5,17 @@ class_name WallState
 @export var jump_velocity = 200.0
 @export var air_state : State
 @export var landing_state: State
-@export var ray_casts : Array[RayCast2D] = []
+@export var raycast : RayCast2D
+@export var player : CharacterBody2D
 
 @onready var timer : Timer = $Timer
 @onready var spam_timer : Timer = $WallCoyote
 var facing : int = 1
 var last_jump = -1
 
+
+func _ready():
+	player.connect("facing_direction_changed", _on_player_facing_direction_changed)
 
 func on_enter():
 	timer.start()
@@ -34,17 +38,17 @@ func state_input(event : InputEvent):
 			wall_jump()
 			
 func check_valid_walls():
-	for raycast in ray_casts:
-		if raycast.is_colliding():
-			var res = acos(Vector2.UP.dot(raycast.get_collision_normal()))
-			if res > PI*0.35 and res < PI*0.55:
-				facing = -1*sign(raycast.get_target_position().x)
-				return true
-			else:
-				return false
+	if raycast.is_colliding():
+		var res = acos(Vector2.UP.dot(raycast.get_collision_normal()))
+		if res > PI*0.35 and res < PI*0.55:
+			print(player.global_position - raycast.position)
+			return true
+		else:
+			return false
 
 func wall_jump():
-		character.velocity.x = facing * 800
+		print(facing)
+		character.velocity.x = -1*facing*800
 		character.velocity.y = -300
 
 	
@@ -55,5 +59,8 @@ func wall_climb(delta):
 	elif Input.is_action_pressed("up"):
 		character.velocity.y = -150
 	
+func _on_player_facing_direction_changed(facing_direction):
+	if facing_direction != 0:
+		facing = facing_direction
 
 

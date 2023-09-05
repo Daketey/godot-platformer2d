@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c1kvj0sxggpt7"]
+[gd_scene load_steps=20 format=3 uid="uid://c1kvj0sxggpt7"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy/enemy_basic.gd" id="1_j02id"]
 [ext_resource type="Texture2D" uid="uid://b8dohsf3lgim1" path="res://Assets/all.png" id="1_uy41r"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://Scripts/Hit.gd" id="6_1kiu0"]
 [ext_resource type="Script" path="res://Scripts/Sword.gd" id="7_pdeid"]
 [ext_resource type="Script" path="res://Scripts/FacingCollisionShape2D.gd" id="8_acudm"]
-[ext_resource type="Script" path="res://Scenes/CheckMapBounds.gd" id="9_xiojl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_srdvj"]
 size = Vector2(16, 16)
@@ -173,98 +172,95 @@ transitions = ["Start", "walk", SubResource("AnimationNodeStateMachineTransition
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0p4n1"]
 size = Vector2(17.0625, 14.6875)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hk1w4"]
-radius = 5.09902
-
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("hit_state")]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("hit_state", "raycast", "check_pit", "body")]
 position = Vector2(56, 96)
+scale = Vector2(-1, 1)
 collision_layer = 4
 script = ExtResource("1_j02id")
-hit_state = NodePath("CharacterStateMachine/Hit")
+hit_state = NodePath("Body/CharacterStateMachine/Hit")
+raycast = NodePath("Body/RayCast2D")
+check_pit = NodePath("Body/CheckPits")
+body = NodePath("Body")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 light_mask = 2
 visibility_layer = 2
-position = Vector2(7, 8)
+position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_srdvj")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, 4)
-scale = Vector2(0.729167, 0.71875)
-texture = ExtResource("1_uy41r")
-hframes = 8
-vframes = 5
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_wjvad")
-}
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeStateMachine_pp6fs")
-anim_player = NodePath("../AnimationPlayer")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="Damageable" type="Node" parent="."]
 script = ExtResource("2_jbnuy")
 health = 50.0
 
-[node name="CharacterStateMachine" type="Node" parent="." node_paths=PackedStringArray("character", "animation_tree", "current_state")]
+[node name="Body" type="Node2D" parent="."]
+visibility_layer = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="Body"]
+position = Vector2(0, 4)
+scale = Vector2(0.729, 0.719)
+texture = ExtResource("1_uy41r")
+hframes = 8
+vframes = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Body"]
+libraries = {
+"": SubResource("AnimationLibrary_wjvad")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="Body"]
+tree_root = SubResource("AnimationNodeStateMachine_pp6fs")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="CharacterStateMachine" type="Node" parent="Body" node_paths=PackedStringArray("character", "animation_tree", "current_state")]
 script = ExtResource("3_ty468")
-character = NodePath("..")
+character = NodePath("../..")
 animation_tree = NodePath("../AnimationTree")
 current_state = NodePath("Walk")
 
-[node name="Walk" type="Node" parent="CharacterStateMachine"]
+[node name="Walk" type="Node" parent="Body/CharacterStateMachine"]
 script = ExtResource("4_q6t72")
 
-[node name="Dead" type="Node" parent="CharacterStateMachine"]
+[node name="Dead" type="Node" parent="Body/CharacterStateMachine"]
 script = ExtResource("4_q6t72")
 
-[node name="Hit" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("damageable", "dead_state", "return_state")]
+[node name="Hit" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("damageable", "dead_state", "return_state")]
 script = ExtResource("6_1kiu0")
-damageable = NodePath("../../Damageable")
+damageable = NodePath("../../../Damageable")
 dead_state = NodePath("../Dead")
 knockback_velocity = 150.0
 return_state = NodePath("../Walk")
 can_move = false
 
-[node name="Timer" type="Timer" parent="CharacterStateMachine/Hit"]
+[node name="Timer" type="Timer" parent="Body/CharacterStateMachine/Hit"]
 wait_time = 0.25
 one_shot = true
 
-[node name="Attack" type="Area2D" parent="." node_paths=PackedStringArray("player", "facing_collision_shape")]
+[node name="Attack" type="Area2D" parent="Body" node_paths=PackedStringArray("player", "facing_collision_shape")]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("7_pdeid")
-player = NodePath("..")
+player = NodePath("../..")
 facing_collision_shape = NodePath("CollisionShape2D")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/Attack"]
 light_mask = 0
 visibility_layer = 2
 position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_0p4n1")
+debug_color = Color(0.976471, 0, 0.419608, 0.419608)
 script = ExtResource("8_acudm")
 facing_left_position = Vector2(0, 8)
 facing_right_position = Vector2(0, 8)
 
-[node name="CheckBounds" type="Area2D" parent="." node_paths=PackedStringArray("player", "facing_collision_shape")]
-light_mask = 0
-script = ExtResource("9_xiojl")
-player = NodePath("..")
-facing_collision_shape = NodePath("CollisionShape2D2")
+[node name="CheckPits" type="RayCast2D" parent="Body"]
+position = Vector2(-25, 7)
+target_position = Vector2(0, 22)
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="CheckBounds"]
-light_mask = 0
-position = Vector2(-19, 22)
-shape = SubResource("CircleShape2D_hk1w4")
-script = ExtResource("8_acudm")
-facing_left_position = Vector2(-23, 23)
-facing_right_position = Vector2(23, 23)
+[node name="RayCast2D" type="RayCast2D" parent="Body"]
+position = Vector2(1, 6)
+target_position = Vector2(-23, 0)
 
-[connection signal="animation_finished" from="AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
-[connection signal="timeout" from="CharacterStateMachine/Hit/Timer" to="CharacterStateMachine/Hit" method="_on_timer_timeout"]
-[connection signal="body_entered" from="Attack" to="Attack" method="_on_body_entered"]
-[connection signal="body_exited" from="CheckBounds" to="CheckBounds" method="_on_body_exited"]
-[connection signal="flip_signal" from="CheckBounds" to="." method="_on_check_bounds_flip_signal"]
+[connection signal="animation_finished" from="Body/AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
+[connection signal="timeout" from="Body/CharacterStateMachine/Hit/Timer" to="Body/CharacterStateMachine/Hit" method="_on_timer_timeout"]
+[connection signal="body_entered" from="Body/Attack" to="Body/Attack" method="_on_body_entered"]

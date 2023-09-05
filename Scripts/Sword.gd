@@ -2,11 +2,10 @@ extends Area2D
 
 @export var damage : int = 10
 @export var player : CharacterBody2D
-@export var facing_collision_shape : FacingCollisionShape2D
+@export var facing_collision_shape : CollisionShape2D
 
 func _ready():
 	monitoring = false
-	player.connect("facing_direction_changed", _on_player_facing_direction_changed)
 
 func _on_body_entered(body):
 	for child in body.get_children():
@@ -16,9 +15,3 @@ func _on_body_entered(body):
 			var direction_sign = sign(direction_to_damageable)
 			child.hit(damage, direction_sign)
 			
-					
-func _on_player_facing_direction_changed( facing_right : bool):
-	if facing_right:
-		facing_collision_shape.position = facing_collision_shape.facing_right_position
-	else:
-		facing_collision_shape.position = facing_collision_shape.facing_left_position

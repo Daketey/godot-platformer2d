@@ -5,10 +5,11 @@ class_name Player
 @export var speed : float = 150.0
 @export var hit_state : State
 @export var attack_state : State
+@export var body : Node2D
 
-@onready var sprite : Sprite2D = $Sprite2D
-@onready var animation_tree : AnimationTree = $AnimationTree
-@onready var state_machine : CharacterStateMachine = $CharacterStateMachine
+@onready var sprite : Sprite2D = $Body/Sprite2D
+@onready var animation_tree : AnimationTree = $Body/AnimationTree
+@onready var state_machine : CharacterStateMachine = $Body/CharacterStateMachine
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -32,12 +33,16 @@ func _ready():
 
 func _physics_process(delta):
 	# Add the gravity.
-	direction= Vector2.ZERO
+#	direction= Vector2.ZERO
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
+	
 	direction.x = Input.get_axis("left", "right")
+	
 	direction = direction.normalized()
-
+	
+	update_flip_direction()
+		
 	if direction != Vector2.ZERO and state_machine.check_can_move():
 		add_acceleration(direction)
 		velocity.x = clamp(velocity.x, -max_horizontal_velocity, max_horizontal_velocity)
@@ -47,11 +52,12 @@ func _physics_process(delta):
 		update_animation(0)
 		
 	move_and_slide()
+
 	
 #	velocity.y = clamp(velocity.y, -MAX_VELOCITY, gravity)
 #	velocity = velocity.normalized()
 	velocity.y += get_gravity() * delta
-	update_flip_direction()
+#	update_flip_direction()
 	
 func add_acceleration(direction):
 		velocity.x += direction.x*speed
@@ -67,11 +73,8 @@ func update_animation(direction):
 func get_gravity():
 	return jump_gravity if velocity.y < 0 else fall_gravity
 
-
 func update_flip_direction():
-	if direction.x > 0:
-			sprite.flip_h = false
-	elif direction.x < 0:
-			sprite.flip_h = true
-			
-	emit_signal("facing_direction_changed", sprite.flip_h)
+	if abs(direction.x) > 0:
+		body.scale.x = sign(direction.x)
+	emit_signal("facing_direction_changed", sign(direction.x))
+		
