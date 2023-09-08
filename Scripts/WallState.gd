@@ -41,13 +41,11 @@ func check_valid_walls():
 	if raycast.is_colliding():
 		var res = acos(Vector2.UP.dot(raycast.get_collision_normal()))
 		if res > PI*0.35 and res < PI*0.55:
-			print(player.global_position - raycast.position)
 			return true
 		else:
 			return false
 
 func wall_jump():
-		print(facing)
 		character.velocity.x = -1*facing*800
 		character.velocity.y = -300
 

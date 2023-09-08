@@ -35,14 +35,14 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	
-	if raycast.is_colliding() or not check_pit.is_colliding():
-		direction.x = -1 * direction.x
-		update_flip_direction()
+	if raycast.is_colliding() or (not check_pit.is_colliding() and is_on_floor()):
+			direction.x = -1 * direction.x
+			
 	
 	# Get the input direction and handle the movement/deceleration.
 	if direction and state_machine.check_can_move():
 		velocity.x = direction.x * SPEED
-
+	update_flip_direction()
 	move_and_slide()
 	
 func update_flip_direction():

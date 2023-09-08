@@ -5,7 +5,8 @@ extends Area2D
 @export var facing_collision_shape : CollisionShape2D
 
 func _ready():
-	monitoring = false
+#	monitoring = false
+	pass
 
 func _on_body_entered(body):
 	for child in body.get_children():

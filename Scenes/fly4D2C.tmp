@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://03e7ya8f8c7f"]
+[gd_scene load_steps=33 format=3 uid="uid://03e7ya8f8c7f"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy/FlyingEnemy.gd" id="1_fr7ne"]
 [ext_resource type="Script" path="res://Scripts/Damageable.gd" id="2_jbnuy"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://Scenes/FlyState.gd" id="5_pxb2s"]
 [ext_resource type="Script" path="res://Scripts/Hit.gd" id="6_1kiu0"]
 [ext_resource type="Script" path="res://Scripts/Enemy/AttackPlayer.gd" id="6_isj6j"]
-[ext_resource type="Script" path="res://Scripts/TrackingState.gd" id="6_s3tns"]
 [ext_resource type="Script" path="res://Scripts/Sword.gd" id="7_pdeid"]
 [ext_resource type="Script" path="res://Scripts/FacingCollisionShape2D.gd" id="8_acudm"]
 [ext_resource type="Script" path="res://Scripts/Enemy/HitArea.gd" id="11_2k4qd"]
@@ -342,11 +341,12 @@ radius = 25.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_d8n7p"]
 radius = 61.3514
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("body")]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("tracking_area", "body")]
 position = Vector2(56, 96)
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_fr7ne")
+tracking_area = NodePath("Body/TrackingArea")
 body = NodePath("Body")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -384,28 +384,13 @@ character = NodePath("../..")
 animation_tree = NodePath("../AnimationTree")
 current_state = NodePath("Fly")
 
-[node name="Fly" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("raycasts", "tracking_area", "tracking_state")]
+[node name="Fly" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("attack_area", "attack_state", "raycasts")]
 script = ExtResource("5_pxb2s")
-raycasts = [NodePath("../../Front"), NodePath("../../Top")]
-tracking_area = NodePath("../../TrackingArea")
-tracking_state = NodePath("../Tracking")
-
-[node name="Timer" type="Timer" parent="Body/CharacterStateMachine/Fly"]
-one_shot = true
-
-[node name="Tracking" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("nav_agent", "fly_state", "attack_area", "attack_state")]
-script = ExtResource("6_s3tns")
-nav_agent = NodePath("../../NavigationAgent2D")
-fly_state = NodePath("../Fly")
 attack_area = NodePath("../../AttackArea")
 attack_state = NodePath("../Attack")
+raycasts = [NodePath("../../Front"), NodePath("../../Top")]
 
-[node name="Buffer" type="Timer" parent="Body/CharacterStateMachine/Tracking"]
-wait_time = 0.2
-autostart = true
-
-[node name="TrackingTimer" type="Timer" parent="Body/CharacterStateMachine/Tracking"]
-wait_time = 6.0
+[node name="Timer" type="Timer" parent="Body/CharacterStateMachine/Fly"]
 one_shot = true
 
 [node name="Attack" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("attack_area", "fly_state")]
@@ -433,6 +418,7 @@ one_shot = true
 [node name="Attack" type="Area2D" parent="Body" node_paths=PackedStringArray("player", "facing_collision_shape")]
 collision_layer = 0
 collision_mask = 2
+monitoring = false
 script = ExtResource("7_pdeid")
 player = NodePath("../..")
 facing_collision_shape = NodePath("CollisionShape2D")
@@ -448,6 +434,7 @@ facing_left_position = Vector2(0, 8)
 facing_right_position = Vector2(0, 8)
 
 [node name="AttackArea" type="Area2D" parent="Body"]
+visible = false
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("11_2k4qd")
@@ -460,6 +447,10 @@ debug_color = Color(0.235294, 0.623529, 0.372549, 0.419608)
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="Body"]
 path_postprocessing = 1
 debug_enabled = true
+
+[node name="Timer" type="Timer" parent="Body"]
+wait_time = 0.2
+autostart = true
 
 [node name="StateDebug" type="Label" parent="Body" node_paths=PackedStringArray("state_machine")]
 offset_left = 35.0
@@ -478,7 +469,7 @@ script = ExtResource("13_47v4m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body/TrackingArea"]
 shape = SubResource("CircleShape2D_d8n7p")
-debug_color = Color(0.627451, 0.521569, 0.239216, 0.419608)
+debug_color = Color(0.960784, 0, 0.505882, 0.419608)
 
 [node name="Timer2" type="Timer" parent="Body/TrackingArea"]
 wait_time = 5.0
@@ -491,12 +482,11 @@ target_position = Vector2(20, 0)
 target_position = Vector2(0, -18)
 
 [connection signal="animation_finished" from="Body/AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
-[connection signal="timeout" from="Body/CharacterStateMachine/Tracking/Buffer" to="Body/CharacterStateMachine/Tracking" method="_on_timer_timeout"]
 [connection signal="timeout" from="Body/CharacterStateMachine/Hit/Timer" to="Body/CharacterStateMachine/Hit" method="_on_timer_timeout"]
 [connection signal="body_entered" from="Body/Attack" to="Body/Attack" method="_on_body_entered"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body/AttackArea" method="_on_body_entered"]
 [connection signal="body_exited" from="Body/AttackArea" to="Body/AttackArea" method="_on_body_exited"]
+[connection signal="timeout" from="Body/Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="Body/TrackingArea" to="Body/TrackingArea" method="_on_body_entered"]
 [connection signal="body_exited" from="Body/TrackingArea" to="Body/TrackingArea" method="_on_body_exited"]
-[connection signal="body_exited" from="Body/TrackingArea" to="Body/CharacterStateMachine/Tracking" method="_on_tracking_area_body_exited"]
 [connection signal="timeout" from="Body/TrackingArea/Timer2" to="Body/TrackingArea" method="_on_timer_2_timeout"]

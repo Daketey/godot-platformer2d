@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d1d72phviy6wg"]
+[gd_scene load_steps=11 format=3 uid="uid://d1d72phviy6wg"]
 
 [ext_resource type="Texture2D" uid="uid://bhj8wxkmhpyal" path="res://Assets/Background.png" id="1_38e7k"]
 [ext_resource type="Script" path="res://Scripts/Map/World.gd" id="1_mqib5"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c1kvj0sxggpt7" path="res://Scenes/enemy_basic.tscn" id="4_y5n5p"]
 [ext_resource type="PackedScene" uid="uid://3n7yq2mvb0yi" path="res://UI/health_changed_display.tscn" id="5_rg6qt"]
 [ext_resource type="PackedScene" uid="uid://03e7ya8f8c7f" path="res://Scenes/flying.tscn" id="7_3wxde"]
+[ext_resource type="PackedScene" uid="uid://vmg6rx2rb4c" path="res://Scenes/mob_attack.tscn" id="8_b0s8t"]
 [ext_resource type="Script" path="res://Scripts/FPSCounter.gd" id="9_up1q6"]
 [ext_resource type="PackedScene" uid="uid://dcwug0rv14vxj" path="res://Scenes/spike.tscn" id="9_wwlan"]
 
@@ -54,6 +55,9 @@ position = Vector2(-34, -77)
 [node name="Enemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("7_3wxde")]
 position = Vector2(110, -184)
 player = NodePath("../Player")
+
+[node name="Enemy4" parent="." instance=ExtResource("8_b0s8t")]
+position = Vector2(-152, 18)
 
 [node name="HealthChangedDisplay" parent="." instance=ExtResource("5_rg6qt")]
 offset_left = -29.0
