@@ -458,6 +458,7 @@ shape = SubResource("CircleShape2D_ojr06")
 debug_color = Color(0.235294, 0.623529, 0.372549, 0.419608)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="Body"]
+path_postprocessing = 1
 debug_enabled = true
 
 [node name="StateDebug" type="Label" parent="Body" node_paths=PackedStringArray("state_machine")]

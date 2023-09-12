@@ -3,9 +3,10 @@ extends State
 var tracking = false
 
 @export var nav_agent : NavigationAgent2D
-@export var fly_state : State
+@export var run_state : State
 @export var attack_area : Area2D
 @export var attack_state : State
+@export var check_walls: RayCast2D
 
 var direction = Vector2.ZERO
 
@@ -20,13 +21,21 @@ func on_enter():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func state_process(delta):
-	print("tracking")
+	
 	if tracking_time.is_stopped():
-		next_state = fly_state
+		next_state = run_state
+		playback.travel("run")
 	
 	direction = character.to_local(nav_agent.get_next_path_position()).normalized()
-
-	character.velocity = direction*character.SPEED
+	direction = direction.round()
+	if direction != Vector2.ZERO:
+		character.velocity.x = direction.x*80
+		
+	if direction.x == 0 and not tracking_time.is_stopped():
+#		next_state = idle_state
+		playback.travel("idle")
+	else:
+		playback.travel("run")
 
 
 func _attack_player(has_entered):

@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/Map/World.gd" id="1_mqib5"]
 [ext_resource type="PackedScene" uid="uid://dk5lk4wtd0jum" path="res://Scenes/player.tscn" id="2_rt0wk"]
 [ext_resource type="PackedScene" uid="uid://ce112vebbwkv0" path="res://Scenes/tile_map.tscn" id="3_ucnhr"]
-[ext_resource type="PackedScene" uid="uid://c1kvj0sxggpt7" path="res://Scenes/enemy_basic.tscn" id="4_y5n5p"]
+[ext_resource type="PackedScene" uid="uid://c1kvj0sxggpt7" path="res://Scenes/moving.tscn" id="4_y5n5p"]
 [ext_resource type="PackedScene" uid="uid://3n7yq2mvb0yi" path="res://UI/health_changed_display.tscn" id="5_rg6qt"]
 [ext_resource type="PackedScene" uid="uid://03e7ya8f8c7f" path="res://Scenes/flying.tscn" id="7_3wxde"]
 [ext_resource type="PackedScene" uid="uid://vmg6rx2rb4c" path="res://Scenes/mob_attack.tscn" id="8_b0s8t"]
@@ -57,7 +57,7 @@ position = Vector2(110, -184)
 player = NodePath("../Player")
 
 [node name="Enemy4" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_b0s8t")]
-position = Vector2(597, -65)
+position = Vector2(401, -94)
 player = NodePath("../Player")
 
 [node name="HealthChangedDisplay" parent="." instance=ExtResource("5_rg6qt")]

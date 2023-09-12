@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://vmg6rx2rb4c"]
+[gd_scene load_steps=36 format=3 uid="uid://vmg6rx2rb4c"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy/mob_attack.gd" id="1_8cy1h"]
 [ext_resource type="Script" path="res://Scripts/Damageable.gd" id="2_jbnuy"]
@@ -7,10 +7,10 @@
 [ext_resource type="Script" path="res://Scripts/State.gd" id="4_q6t72"]
 [ext_resource type="Script" path="res://Scripts/Enemy/EnemyRunState.gd" id="5_yma5o"]
 [ext_resource type="Script" path="res://Scripts/Hit.gd" id="6_1kiu0"]
-[ext_resource type="Script" path="res://Scripts/TrackingState.gd" id="7_1qul2"]
 [ext_resource type="Script" path="res://Scripts/Sword.gd" id="7_pdeid"]
 [ext_resource type="Script" path="res://Scripts/Enemy/AttackPlayer.gd" id="8_7cfo8"]
 [ext_resource type="Script" path="res://Scripts/FacingCollisionShape2D.gd" id="8_acudm"]
+[ext_resource type="Script" path="res://Scripts/TrackingFloor.gd" id="8_tke7t"]
 [ext_resource type="Script" path="res://Scripts/Enemy/HitArea.gd" id="10_4joa8"]
 [ext_resource type="Script" path="res://Scripts/Enemy/PlayerEnter.gd" id="12_nshis"]
 [ext_resource type="Script" path="res://Scripts/StateDebug.gd" id="14_6wpra"]
@@ -249,7 +249,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1.035, 1.02)]
+"values": [Vector2(1.31, 1.291)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -371,6 +371,10 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0kql3"]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oj75n"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_whm4i"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_pp6fs"]
 states/attack/node = SubResource("AnimationNodeAnimation_bf0xj")
 states/attack/position = Vector2(515, 50)
@@ -380,7 +384,7 @@ states/idle/node = SubResource("AnimationNodeAnimation_ugoy2")
 states/idle/position = Vector2(380, 43)
 states/run/node = SubResource("AnimationNodeAnimation_0rcri")
 states/run/position = Vector2(318, 114)
-transitions = ["Start", "run", SubResource("AnimationNodeStateMachineTransition_xh74u"), "run", "dead", SubResource("AnimationNodeStateMachineTransition_my105"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_m6lnl"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_0kql3")]
+transitions = ["Start", "run", SubResource("AnimationNodeStateMachineTransition_xh74u"), "run", "dead", SubResource("AnimationNodeStateMachineTransition_my105"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_m6lnl"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_0kql3"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_oj75n"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_whm4i")]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0p4n1"]
 size = Vector2(10.2656, 13.1719)
@@ -412,8 +416,8 @@ health = 50.0
 visibility_layer = 4
 
 [node name="Sprite2D" type="Sprite2D" parent="Body"]
-position = Vector2(1, -1)
-scale = Vector2(-1.23, 1.212)
+position = Vector2(1, 5)
+scale = Vector2(1.035, 1.02)
 texture = ExtResource("3_6gxnb")
 hframes = 8
 vframes = 4
@@ -460,12 +464,12 @@ can_move = false
 wait_time = 0.25
 one_shot = true
 
-[node name="Tracking" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("nav_agent", "fly_state", "attack_area", "attack_state")]
-script = ExtResource("7_1qul2")
+[node name="Tracking" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("nav_agent", "attack_area", "attack_state", "check_walls")]
+script = ExtResource("8_tke7t")
 nav_agent = NodePath("../../NavigationAgent2D")
-fly_state = NodePath("../Run")
 attack_area = NodePath("../../AttackArea")
 attack_state = NodePath("../Attack")
+check_walls = NodePath("../../CheckWalls")
 
 [node name="Buffer" type="Timer" parent="Body/CharacterStateMachine/Tracking"]
 wait_time = 0.2
@@ -475,10 +479,10 @@ autostart = true
 wait_time = 8.0
 one_shot = true
 
-[node name="Attack" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("attack_area", "fly_state")]
+[node name="Attack" type="Node" parent="Body/CharacterStateMachine" node_paths=PackedStringArray("attack_area")]
 script = ExtResource("8_7cfo8")
 attack_area = NodePath("../../AttackArea")
-fly_state = NodePath("../Run")
+can_move = false
 
 [node name="Attack" type="Area2D" parent="Body" node_paths=PackedStringArray("player", "facing_collision_shape")]
 collision_layer = 0
@@ -506,9 +510,12 @@ position = Vector2(1, 6)
 target_position = Vector2(23, 0)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="Body"]
+path_postprocessing = 1
 debug_enabled = true
 
 [node name="AttackArea" type="Area2D" parent="Body"]
+position = Vector2(5, 0)
+scale = Vector2(1.2, 1.2)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("10_4joa8")
@@ -523,6 +530,7 @@ collision_mask = 2
 script = ExtResource("12_nshis")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body/TrackingArea"]
+position = Vector2(1, 0)
 shape = SubResource("CircleShape2D_iedet")
 
 [node name="TrackingTimer" type="Timer" parent="Body/TrackingArea"]
@@ -530,10 +538,10 @@ wait_time = 5.0
 one_shot = true
 
 [node name="StateDebug" type="Label" parent="." node_paths=PackedStringArray("state_machine")]
-offset_left = -16.0
-offset_top = -35.0
-offset_right = 24.0
-offset_bottom = -12.0
+offset_left = -38.0
+offset_top = -39.0
+offset_right = 2.0
+offset_bottom = -16.0
 script = ExtResource("14_6wpra")
 state_machine = NodePath("../Body/CharacterStateMachine")
 
