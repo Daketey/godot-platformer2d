@@ -178,7 +178,7 @@ scale = Vector2(-1, 1)
 collision_layer = 4
 script = ExtResource("1_j02id")
 hit_state = NodePath("Body/CharacterStateMachine/Hit")
-raycast = NodePath("Body/RayCast2D")
+raycast = NodePath("Body/CheckWalls")
 check_pit = NodePath("Body/CheckPits")
 body = NodePath("Body")
 
@@ -257,7 +257,7 @@ facing_right_position = Vector2(0, 8)
 position = Vector2(-25, 7)
 target_position = Vector2(0, 22)
 
-[node name="RayCast2D" type="RayCast2D" parent="Body"]
+[node name="CheckWalls" type="RayCast2D" parent="Body"]
 position = Vector2(1, 7)
 target_position = Vector2(-21, 0)
 

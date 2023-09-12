@@ -48,11 +48,6 @@ func _physics_process(delta):
 func update_flip_direction():
 	if abs(direction.x) > 0:
 		body.scale.x = sign(direction.x)
-			
-
-func _on_check_bounds_flip_signal(direction_sign : int):
-	direction.x = -1 * direction.x
-	update_flip_direction()
 	
 func get_all_children(in_node, arr:=[]):
 	arr.push_back(in_node)

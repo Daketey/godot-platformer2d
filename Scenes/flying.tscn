@@ -458,7 +458,6 @@ shape = SubResource("CircleShape2D_ojr06")
 debug_color = Color(0.235294, 0.623529, 0.372549, 0.419608)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="Body"]
-path_postprocessing = 1
 debug_enabled = true
 
 [node name="StateDebug" type="Label" parent="Body" node_paths=PackedStringArray("state_machine")]
@@ -480,7 +479,7 @@ script = ExtResource("13_47v4m")
 shape = SubResource("CircleShape2D_d8n7p")
 debug_color = Color(0.627451, 0.521569, 0.239216, 0.419608)
 
-[node name="Timer2" type="Timer" parent="Body/TrackingArea"]
+[node name="TrackingTimer" type="Timer" parent="Body/TrackingArea"]
 wait_time = 5.0
 one_shot = true
 
@@ -491,12 +490,12 @@ target_position = Vector2(20, 0)
 target_position = Vector2(0, -18)
 
 [connection signal="animation_finished" from="Body/AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
-[connection signal="timeout" from="Body/CharacterStateMachine/Tracking/Buffer" to="Body/CharacterStateMachine/Tracking" method="_on_timer_timeout"]
+[connection signal="timeout" from="Body/CharacterStateMachine/Tracking/Buffer" to="Body/CharacterStateMachine/Tracking" method="_on_buffer_timeout"]
 [connection signal="timeout" from="Body/CharacterStateMachine/Hit/Timer" to="Body/CharacterStateMachine/Hit" method="_on_timer_timeout"]
 [connection signal="body_entered" from="Body/Attack" to="Body/Attack" method="_on_body_entered"]
 [connection signal="body_entered" from="Body/AttackArea" to="Body/AttackArea" method="_on_body_entered"]
 [connection signal="body_exited" from="Body/AttackArea" to="Body/AttackArea" method="_on_body_exited"]
 [connection signal="body_entered" from="Body/TrackingArea" to="Body/TrackingArea" method="_on_body_entered"]
-[connection signal="body_exited" from="Body/TrackingArea" to="Body/TrackingArea" method="_on_body_exited"]
 [connection signal="body_exited" from="Body/TrackingArea" to="Body/CharacterStateMachine/Tracking" method="_on_tracking_area_body_exited"]
-[connection signal="timeout" from="Body/TrackingArea/Timer2" to="Body/TrackingArea" method="_on_timer_2_timeout"]
+[connection signal="body_exited" from="Body/TrackingArea" to="Body/TrackingArea" method="_on_body_exited"]
+[connection signal="timeout" from="Body/TrackingArea/TrackingTimer" to="Body/TrackingArea" method="_on_tracking_timer_timeout"]

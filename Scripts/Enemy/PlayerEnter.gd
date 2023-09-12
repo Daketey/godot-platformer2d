@@ -2,7 +2,7 @@ extends Area2D
 
 signal enter_player(has_entered)
 
-@onready var timer = $Timer2
+@onready var timer = $TrackingTimer
 
 var enter = false
 # Called when the node enters the scene tree for the first time.
@@ -15,15 +15,14 @@ func _process(delta):
 	
 
 func _on_body_entered(body):
+	print("Player Enter")
 	emit_signal("enter_player", true)
 	enter = true
-
 
 func _on_body_exited(body):
 	enter = false
 	timer.start()
 
-
-func _on_timer_2_timeout():
+func _on_tracking_timer_timeout():
 	if not enter:
 		emit_signal("enter_player", false)

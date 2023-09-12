@@ -10,5 +10,5 @@ func _ready():
 func _attack_player(has_entered):
 	if has_entered == false:
 		next_state = fly_state
-		playback.travel("fly")
+		playback.travel("run")
 

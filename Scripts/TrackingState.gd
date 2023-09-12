@@ -20,12 +20,12 @@ func on_enter():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func state_process(delta):
-	
+	print("tracking")
 	if tracking_time.is_stopped():
 		next_state = fly_state
 	
 	direction = character.to_local(nav_agent.get_next_path_position()).normalized()
-		
+	print(direction)
 	if direction != Vector2.ZERO:
 			character.velocity = direction*character.SPEED
 
@@ -38,9 +38,10 @@ func _attack_player(has_entered):
 func make_path():
 	nav_agent.target_position = character.player.global_position
 		
-func _on_timer_timeout():
-	make_path()
-
 
 func _on_tracking_area_body_exited(body):
 	tracking_time.start()
+
+
+func _on_buffer_timeout():
+	make_path()
